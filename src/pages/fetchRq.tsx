@@ -1,19 +1,29 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import { deletePost, fetchPosts, updatePost } from "../api/api";
 import { NavLink } from "react-router";
+import { useState } from "react";
 
 export const FetchRq = () => {
+  const [pageNumber, setPageNumber] = useState(0);
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["posts"],
-    queryFn: fetchPosts,
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["posts", pageNumber],
+    queryFn: () => fetchPosts(pageNumber),
+    // gcTime: 5 * 1000 * 60,
+    staleTime: 5000,
+    placeholderData: keepPreviousData,
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id) => deletePost(Number(id)),
     onSuccess: (data: any, id: number) => {
-      queryClient.setQueryData(["posts"], (curElem: any) =>
+      queryClient.setQueryData(["posts", pageNumber], (curElem: any) =>
         curElem?.filter((post: { id: number }) => post.id !== id)
       );
     },
@@ -22,7 +32,7 @@ export const FetchRq = () => {
   const updateMutation = useMutation({
     mutationFn: (id) => updatePost(Number(id), "I have updated"),
     onSuccess: (appData: any, postID: number) => {
-      queryClient.setQueryData(["posts"], (posts: any) =>
+      queryClient.setQueryData(["posts", pageNumber], (posts: any) =>
         posts.map((post: any) =>
           post.id === postID ? { ...post, title: appData.data.title } : post
         )
@@ -30,8 +40,9 @@ export const FetchRq = () => {
     },
   });
 
-  if (isLoading) return <p>Loading....</p>;
+  if (isPending) return <p>Loading....</p>;
   if (isError) return <p> Error: {error.message || "Something went wrong!"}</p>;
+  console.log(">>>>isPending");
 
   return (
     <div>
@@ -51,6 +62,17 @@ export const FetchRq = () => {
           );
         })}
       </ul>
+
+      <div className="pagination-section container">
+        <button
+          disabled={pageNumber === 0 ? true : false}
+          onClick={() => setPageNumber((prev) => prev - 3)}
+        >
+          Prev
+        </button>
+        <p>{pageNumber / 3 + 1}</p>
+        <button onClick={() => setPageNumber((prev) => prev + 3)}>Next</button>
+      </div>
     </div>
   );
 };

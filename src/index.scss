@@ -122,3 +122,13 @@ nav {
     }
   }
 }
+
+.pagination-section {
+  margin: auto;
+  display: flex;
+  gap: 3.2rem;
+  width: 60%;
+  justify-content: center;
+  color: #fff;
+  padding: 10px 0;
+}
