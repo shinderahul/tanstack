@@ -29,3 +29,19 @@ export const deletePost = (id: number) => {
 export const updatePost = (id: number, title: string) => {
   return api.patch(`/posts/${id}`, { title });
 };
+
+type PageParamType = {
+  pageParam?: number;
+};
+
+export const fetchUsers = async ({ pageParam = 1 }: PageParamType) => {
+  try {
+    const res = await axios.get(
+      `https://api.github.com/users?per_page=10&page=${pageParam}`
+    );
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

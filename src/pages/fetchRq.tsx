@@ -12,7 +12,7 @@ export const FetchRq = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const queryClient = useQueryClient();
 
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isPending, isError, error, isFetching } = useQuery({
     queryKey: ["posts", pageNumber],
     queryFn: () => fetchPosts(pageNumber),
     // gcTime: 5 * 1000 * 60,
@@ -62,6 +62,8 @@ export const FetchRq = () => {
           );
         })}
       </ul>
+
+      {isFetching ? <p className="white"> Loading...</p> : null}
 
       <div className="pagination-section container">
         <button

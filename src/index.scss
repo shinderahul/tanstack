@@ -132,3 +132,19 @@ nav {
   color: #fff;
   padding: 10px 0;
 }
+
+.white {
+  color: #fff;
+  text-align: center;
+}
+
+.user {
+  list-style: none;
+  li {
+    background-color: #111;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: #fff;
+    text-transform: capitalize;
+  }
+}
