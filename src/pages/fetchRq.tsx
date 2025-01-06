@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deletePost, fetchPosts } from "../api/api";
+import { deletePost, fetchPosts, updatePost } from "../api/api";
 import { NavLink } from "react-router";
 
 export const FetchRq = () => {
@@ -15,6 +15,17 @@ export const FetchRq = () => {
     onSuccess: (data: any, id: number) => {
       queryClient.setQueryData(["posts"], (curElem: any) =>
         curElem?.filter((post: { id: number }) => post.id !== id)
+      );
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: (id) => updatePost(Number(id), "I have updated"),
+    onSuccess: (appData: any, postID: number) => {
+      queryClient.setQueryData(["posts"], (posts: any) =>
+        posts.map((post: any) =>
+          post.id === postID ? { ...post, title: appData.data.title } : post
+        )
       );
     },
   });

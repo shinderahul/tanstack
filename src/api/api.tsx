@@ -25,3 +25,7 @@ export const fetchIndPost = async (id: number) => {
 export const deletePost = (id: number) => {
   return api.delete(`/posts/${id}`);
 };
+
+export const updatePost = (id: number, title: string) => {
+  return api.patch(`/posts/${id}`, { title });
+};
