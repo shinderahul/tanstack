@@ -1,11 +1,22 @@
-import { useQueries, useQuery } from "@tanstack/react-query";
-import { fetchPosts } from "../api/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deletePost, fetchPosts } from "../api/api";
 import { NavLink } from "react-router";
 
 export const FetchRq = () => {
+  const queryClient = useQueryClient();
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id) => deletePost(Number(id)),
+    onSuccess: (data: any, id: number) => {
+      queryClient.setQueryData(["posts"], (curElem: any) =>
+        curElem?.filter((post: { id: number }) => post.id !== id)
+      );
+    },
   });
 
   if (isLoading) return <p>Loading....</p>;
@@ -23,6 +34,8 @@ export const FetchRq = () => {
                 <p>{title}</p>
                 <p>{body}</p>
               </NavLink>
+              <button onClick={() => deleteMutation.mutate(id)}>Delete</button>
+              <button onClick={() => updateMutation.mutate(id)}>Update</button>
             </li>
           );
         })}
