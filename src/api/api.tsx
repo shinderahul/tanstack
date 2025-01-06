@@ -12,3 +12,12 @@ export const fetchPosts = async () => {
     console.log(error);
   }
 };
+
+export const fetchIndPost = async (id: number) => {
+  try {
+    const res: any = await api.get(`/posts?id=${id}`);
+    return res.status === 200 ? res.data[0] : [];
+  } catch (error) {
+    console.log(error);
+  }
+};

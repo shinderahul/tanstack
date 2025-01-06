@@ -1,5 +1,6 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { fetchPosts } from "../api/api";
+import { NavLink } from "react-router";
 
 export const FetchRq = () => {
   const { data, isLoading, isError, error } = useQuery({
@@ -7,7 +8,6 @@ export const FetchRq = () => {
     queryFn: fetchPosts,
   });
 
-  console.log(">>>>data", isLoading, data);
   if (isLoading) return <p>Loading....</p>;
   if (isError) return <p> Error: {error.message || "Something went wrong!"}</p>;
 
@@ -18,9 +18,11 @@ export const FetchRq = () => {
           const { id, title, body } = curElem;
           return (
             <li key={id}>
-              <p>{id}</p>
-              <p>{title}</p>
-              <p>{body}</p>
+              <NavLink to={`/fetchrq/${id}`}>
+                <p>{id}</p>
+                <p>{title}</p>
+                <p>{body}</p>
+              </NavLink>
             </li>
           );
         })}

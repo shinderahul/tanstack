@@ -5,6 +5,7 @@ import { Home } from "./pages/home";
 import { FetchRq } from "./pages/fetchRq";
 import { InfiniteScroll } from "./pages/infiniteScroll";
 import { Header } from "./components/header";
+import { FetchInd } from "./pages/fetchInd";
 
 function App() {
   const queryClient = new QueryClient();
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="fetchrq" element={<FetchRq />} />
+          <Route path="/fetchrq/:id" element={<FetchInd />} />
           <Route path="infinite-scroll" element={<InfiniteScroll />} />
         </Routes>
       </BrowserRouter>
