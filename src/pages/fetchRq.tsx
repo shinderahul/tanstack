@@ -23,6 +23,7 @@ export const FetchRq = () => {
   const deleteMutation = useMutation({
     mutationFn: (id) => deletePost(Number(id)),
     onSuccess: (data: any, id: number) => {
+      console.log(">>>data", data);
       queryClient.setQueryData(["posts", pageNumber], (curElem: any) =>
         curElem?.filter((post: { id: number }) => post.id !== id)
       );
